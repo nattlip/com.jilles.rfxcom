@@ -1,0 +1,162 @@
+{
+  "id": "com.jilles.rfxcom",
+  "version": "0.0.496",
+  "compatibility": ">=1.0.1",
+  "category": [
+    "climate",
+    "security",
+    "lights",
+    "appliances"
+  ],
+  "name": {
+    "en": "rfxcom",
+    "nl": "rfxcom"
+  },
+  "description": {
+    "en": "App to receive and send Rfxcom Lan reports",
+    "nl": "App om rfxcom rapporten te ontvangen en versturen"
+  },
+  "author": {
+    "name": "Jilles Miedema"
+  },
+  "images": {
+    "large": "./assets/images/large.jpg",
+    "small": "./assets/images/small.jpg"
+  },
+  "permissions": [],
+
+
+
+  "drivers": [
+    {
+      "id": "oregon",
+      "name": {
+        "en": "Oregon Sensor",
+        "nl": "Oregon Sensor"
+      },
+      "images": {
+        "large": "drivers/oregon/assets/large.jpg",
+        "small": "drivers/oregon/assets/small.jpg"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "alarm_battery",
+        "measure_battery",
+        "measure_current",
+        "measure_gust_angle",
+        "measure_gust_strength",
+        "measure_humidity",
+        "measure_power",
+        "measure_pressure",
+        "measure_rain",
+        "measure_temperature",
+        "measure_ultraviolet",
+        "measure_wind_strength",
+        "meter_power"
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings",
+            "nl": "Instellingen"
+          },
+          "children": [
+            {
+              "id": "sensorId",
+              "type": "text",
+              "label": {
+                "en": "Sensor id",
+                "nl": "Sensor id"
+              },
+              "value": "0xcb02",
+              "pattern": "0x[a-f0-9]+",
+              "hint": {
+                "en": "Hex formatted unique identifier of sensor. After battery replace this can be changed."
+              }
+            }
+          ]
+        }
+      ],
+      "pair": [
+        {
+          "id": "showoptions"
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_device"
+          }
+        },
+        {
+          "id": "add_device",
+          "template": "add_devices"
+        }
+      ]
+    },
+    {
+      "id": "security",
+      "name": {
+        "en": "Security Sensor",
+        "nl": "Security Sensor"
+      },
+      "images": {
+        "large": "drivers/security/assets/large.jpg",
+        "small": "drivers/security/assets/small.jpg"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "alarm_contact",
+        "alarm_motion",
+        "alarm_battery",
+        "alarm_tamper",
+        "alarm_night"
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings",
+            "nl": "Instellingen"
+          },
+          "children": [
+            {
+              "id": "sensorId",
+              "type": "text",
+              "label": {
+                "en": "Sensor id",
+                "nl": "Sensor id"
+              },
+              "value": "0xcb02",
+              "pattern": "0x[a-f0-9]+",
+              "hint": {
+                "en": "Hex formatted unique identifier of sensor. After battery replace this can be changed."
+              }
+            }
+          ]
+        }
+      ],
+      "pair": [
+
+        {
+          "id": "list_sensors",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_sensors"
+          }
+        },
+        {
+          "id": "add_sensors",
+          "template": "add_devices"
+        }
+      ]
+    }
+  ]
+
+
+
+
+
+
+}

@@ -1,0 +1,7 @@
+﻿#X10.text
+#testclass.js
+# Blacklist files/folders in same directory as the .gitignore file
+#/*
+#!drivers/OnOff/pair/showoptions.html
+TextFile2.txt
+env.json

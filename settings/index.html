@@ -1,0 +1,186 @@
+﻿<!doctype html>
+<html>
+<head>
+
+</head>
+<body>
+
+    <h1>Rfxcom Lan Settings Page</h1>
+       <p>set host port </p>
+
+    <h2>Test Settings</h2>
+    <p>test your settings </p>
+
+    <fieldset>
+        <legend>Rfxcom  Lan variables</legend>
+
+        <div class='field row'>
+            <label for='ip'>ipaddress  server</label>
+            <input id='ip' type='text' value='' />     
+        </div>
+
+        <div class='field row'>
+            <label for='portReceiver'>port  receiver</label>
+            <input id='portReceiver' type='text' value='' />           
+        </div>
+
+        <div class='field row'>
+            <label for='portTransmitter'>port transmitter</label>
+            <input id='portTransmitter' type='text' value='' />        
+        </div>
+
+        
+
+        <div class='field row'>
+            <label for='test'>servertested</label>
+            <div id='test' style='display: inline-block'></div>
+        </div>
+
+        <div class='field row'>
+            <label for='connected'>serverconnected</label>
+            <div id='connected' style='display: inline-block'></div>
+        </div>
+
+
+        <!--<div class='field row'>
+            <label for='test2'>port rfxcom server</label>
+            <textarea id='test2'>textarea sample</textarea>
+        </div>-->
+
+
+    </fieldset>
+
+    <button class='right' onclick='save()'>Save changes</button>
+    <button class='right' onclick='retrieve()'>retrieve settings</button>
+    <button class='right' onclick='testserver()'>test rfxcom server</button>
+
+    <script type='text/javascript'>
+
+        var testingglobal = false ;     // global in javascript
+        var connectedglobal;
+
+        function onHomeyReady() {
+
+          
+
+
+
+
+            Homey.get('serverIp', function (err, serverIp) {
+  //              if (err) return console.error('Could not get serverip', err);
+                document.getElementById('ip').value = serverIp;
+            });
+            Homey.get('serverReceiverPort', function (err, serverReceiverPort) {
+  //              if (err) return console.error('Could not get serverport', err);
+                document.getElementById('portReceiver').value = serverReceiverPort;
+            });
+
+            Homey.get('serverTransmitterPort', function (err, serverTransmitterPort) {
+     //           if (err) return console.error('Could not get password', err);
+                document.getElementById('portTransmitter').value = serverTransmitterPort;
+            });
+
+
+            
+
+
+
+
+
+            //Homey.get('testing', function (err, testing) {
+            //    //if (testing) { testing = false } else if (!testing) { testing = true };
+            //    testingglobal = testing;
+
+            //    if (err) return console.error('Could not get testing', err);
+            //    document.getElementById('test').innerHTML = testing;
+            //});
+
+
+            // gets event data from app.js firesd in callback request
+        //    Homey.on('my_event', function (data) {
+
+               
+
+
+            //    if (data.rfxcomserverconnected)
+            //        document.getElementById('connected').innerHTML = data.rfxcomserverconnected;
+            //    else if (data.testing)
+            //    document.getElementById('test').innerHTML = data.testing;
+            //});
+
+            Homey.ready()
+
+        }
+
+
+
+
+        function save() {
+
+     
+
+
+
+            Homey.set('serverIp', document.getElementById('ip').value);
+            Homey.set('serverReceiverPort', document.getElementById('portReceiver').value);
+            Homey.set('serverTransmitterPort', document.getElementById('portTransmitter').value);
+        
+
+
+
+        };
+
+        function retrieve()
+        {
+            Homey.get('serverIp', function (err,serverIp) {
+                if (err) return console.error('Could not get serverip', err);
+                document.getElementById('ip').value = serverIp;
+            });
+
+            Homey.get('serverReceiverPort', function (err, serverReceiverPort) {
+                 if (err) return console.error('Could not get serverport', err);
+                document.getElementById('portReceiver').value = serverReceiverPort;
+            });
+
+            Homey.get('serverTransmitterPort', function (err, serverTransmitterPort) {
+                if (err) return console.error('Could not get password', err);
+                document.getElementById('portTransmitter').value = serverTransmitterPort;
+            });
+
+
+
+
+
+
+        }
+
+
+        function testserver() {
+
+           testingglobal = false
+           Homey.set('testing',testingglobal)
+           console.log('testingglobal', testingglobal);
+        }
+
+
+
+        //function initpagesettings(settingstring,setting){
+        //    Homey.get(settingstring, function (err,setting) {
+        //        if (err) { return 'no data set' }
+
+        //    else{ return   setting}
+
+        //       });
+        //};
+
+        //initpagesettings('serverip',serverip) initpagesettings('serverip', serverip);
+
+
+
+
+
+
+    </script>
+
+</body>
+</html>
