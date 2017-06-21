@@ -41,6 +41,19 @@
             <div id='connected' style='display: inline-block'></div>
         </div>
 
+        <div class='field row'>
+            <label for='errormessages'>errormessages</label>
+            <div id='errormessages' style='display: inline-block'></div>
+        </div>
+        <div class='field row'>
+            <label for='messages'>messages</label>
+            <div id='messages' style='display: inline-block'></div>
+        </div>
+        <div class='field row'>
+            <label for='something'>fromApi</label>
+            <div id='something' style='display: inline-block'></div>
+        </div>
+
 
         <!--<div class='field row'>
             <label for='test2'>port rfxcom server</label>
@@ -51,18 +64,18 @@
     </fieldset>
 
     <button class='right' onclick='save()'>Save changes</button>
-    <button class='right' onclick='retrieve()'>retrieve settings</button>
+    <button class='right' onclick='getSomething()'>retrieve settings</button>
     <button class='right' onclick='testserver()'>test rfxcom server</button>
 
     <script type='text/javascript'>
 
-        var testingglobal = false ;     // global in javascript
+        var testingglobal;
         var connectedglobal;
 
         function onHomeyReady() {
 
           
-
+          
 
 
 
@@ -107,13 +120,41 @@
             //    else if (data.testing)
             //    document.getElementById('test').innerHTML = data.testing;
             //});
+           
+            Homey.on('serverconnected', function (value) {
+                    if (value) {
+                        console.log('connected value ', value);
+                        document.getElementById('connected').innerHTML = value;
+                    }
+                });
+                Homey.on('errormessage', function (value) {
+                    if (value) {
+                        console.log('error value ', value);
+
+
+                        document.getElementById('errormessages').innerHTML = value;
+                    }
+                });
+
+                Homey.on('testing', function (value) {
+                    if (value) {
+                        console.log('error value ', value);
+                        document.getElementById('test').innerHTML = value;
+                    }
+                });
+         
+
+
+
+
+
 
             Homey.ready()
 
         }
 
 
-
+     
 
         function save() {
 
@@ -157,27 +198,39 @@
 
         function testserver() {
 
-           testingglobal = false
-           Homey.set('testing',testingglobal)
-           console.log('testingglobal', testingglobal);
+            testingglobal = true
+            Homey.api('PUT', '/testserver/', { 'test' : 'jillestest'}, function (err, ok) {
+                if (ok) {
+                    document.getElementById('messages').innerHTML = ok;
+                }
+            });
+            
+           
+        };
+
+       
+
+        function getSomething() {
+
+            // Get Gateway configuration
+            Homey.api('GET', '/getSomething/', {}, function (err, something) {
+                if (something) {
+                    document.getElementById('something').innerHTML = something;
+                    console.log(`gotsomething`)
+                }
+            });
+
         }
 
 
+        function initpagesettings(settingstring, setting) {
+            Homey.get(settingstring, function (err, setting) {
+                if (err) { return 'no data set' }
 
-        //function initpagesettings(settingstring,setting){
-        //    Homey.get(settingstring, function (err,setting) {
-        //        if (err) { return 'no data set' }
+                else { return setting }
 
-        //    else{ return   setting}
-
-        //       });
-        //};
-
-        //initpagesettings('serverip',serverip) initpagesettings('serverip', serverip);
-
-
-
-
+            });
+        };
 
 
     </script>

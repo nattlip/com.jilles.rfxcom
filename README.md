@@ -39,6 +39,11 @@ sending x10 signals
 
 first submission release to alpha channel
 
+21-06-2017
+
+adjusted settingspage , first setup communication with api.js , check on ip and port input 
+added working oregon drivers for temp temphum temphumbar uv amd rain 
+
 
 [![Paypal donate][pp-donate-image]][pp-donate-link]
 [pp-donate-link]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=42UGL52J4KPZE

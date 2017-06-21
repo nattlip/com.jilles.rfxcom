@@ -1,6 +1,6 @@
 {
   "id": "com.jilles.rfxcom",
-  "version": "0.0.496",
+  "version": "0.0.512",
   "compatibility": ">=1.0.1",
   "category": [
     "climate",
@@ -28,6 +28,143 @@
 
 
   "drivers": [
+    {
+      "id": "TEMPHUMBAR",
+      "name": {
+        "en": "TEMPHUMBAR",
+        "nl": "TEMPHUMBAR"
+      },
+      "class": "sensor",
+      "capabilities": [ "measure_temperature", "measure_humidity", "measure_pressure", "alarm_battery" ],
+      "images": {
+        "large": "drivers/TEMPHUMBAR/assets/images/large.jpg",
+        "small": "drivers/TEMPHUMBAR/assets/images/small.jpg"
+      },
+      "pair": [
+
+        {
+          "id": "list_sensors",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_sensors"
+          }
+        },
+        {
+          "id": "add_sensors",
+          "template": "add_devices"
+        }
+      ]
+    },
+    {
+      "id": "TEMPHUM",
+      "name": {
+        "en": "TEMPHUM",
+        "nl": "TEMPHUM"
+      },
+      "class": "sensor",
+      "capabilities": [ "measure_temperature", "measure_humidity", "alarm_battery" ],
+      "images": {
+        "large": "drivers/TEMPHUM/assets/images/large.jpg",
+        "small": "drivers/TEMPHUM/assets/images/small.jpg"
+      },
+      "pair": [
+
+        {
+          "id": "list_sensors",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_sensors"
+          }
+        },
+        {
+          "id": "add_sensors",
+          "template": "add_devices"
+        }
+      ]
+    },
+
+    {
+      "id": "RAIN",
+      "name": {
+        "en": "RAIN",
+        "nl": "RAIN"
+      },
+      "class": "sensor",
+      "capabilities": [ "measure_rain", "alarm_battery" ],
+      "images": {
+        "large": "drivers/RAIN/assets/images/large.jpg",
+        "small": "drivers/RAIN/assets/images/small.jpg"
+      },
+      "pair": [
+
+        {
+          "id": "list_sensors",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_sensors"
+          }
+        },
+        {
+          "id": "add_sensors",
+          "template": "add_devices"
+        }
+      ]
+    },
+
+    {
+      "id": "UV",
+      "name": {
+        "en": "UV",
+        "nl": "UV"
+      },
+      "class": "sensor",
+      "capabilities": [ "measure_ultraviolet", "alarm_battery" ],
+      "images": {
+        "large": "drivers/UV/assets/images/large.jpg",
+        "small": "drivers/UV/assets/images/small.jpg"
+      },
+      "pair": [
+
+        {
+          "id": "list_sensors",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_sensors"
+          }
+        },
+        {
+          "id": "add_sensors",
+          "template": "add_devices"
+        }
+      ]
+    },
+    {
+      "id": "TEMP",
+      "name": {
+        "en": "TEMP",
+        "nl": "TEMP"
+      },
+      "class": "sensor",
+      "capabilities": [ "measure_temperature", "alarm_battery" ],
+      "images": {
+        "large": "drivers/TEMP/assets/images/large.jpg",
+        "small": "drivers/TEMP/assets/images/small.jpg"
+      },
+      "pair": [
+
+        {
+          "id": "list_sensors",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_sensors"
+          }
+        },
+        {
+          "id": "add_sensors",
+          "template": "add_devices"
+        }
+      ]
+    },
     {
       "id": "oregon",
       "name": {

@@ -9,7 +9,7 @@ const convert = require('./lib/baseConverter').jan.ConvertBase;
 const helpFunctions = require('./lib/helpFunctions.js').jan;
 const libClass = require('./lib/libClass.js');
 const Log = require('homey-log').Log;
-const rfxcom = require('./rfxcomLan.js');
+
 const securityDriver  = require('./drivers/security/driver.js')
 require('./lib/lib.js')();
 
@@ -21,7 +21,7 @@ class App {
 
     constructor() {
 
-
+        
         this.filename = path.basename(__filename)
         this.dirname = path.basename(__dirname);
         this.lib = new libClass();
@@ -34,21 +34,27 @@ class App {
         this.heardList = [];
         this.app = ''
         this.jil = ""
-        
-        
+
+        this.rfxcom = require('./rfxcomLan.js')
+
+
+        this.getSomething = () => {
+
+            let message = `gotsomething`
+            this.lib.log(message)
+            return message
+
+        }
 
 
 
 
         this.init = () => {
-            this.lib = new libClass();
-            this.lib.log = this.lib.log.bind(this);
-            this.debug = true;//  to set debug on or off 
-            this.lib.log(` ${this.constructor.name}  is this. `, util.inspect(this));
+
+            this.rfxcom = require('./rfxcomLan.js');
             this.homeyDevices = [];
             this.devicesData = [];
-            this.heardList = [];
-           
+            this.heardList = [];         
 
             this.lib.log('init homeyDevices ', util.inspect(this.homeyDevices, false, null))
 
@@ -78,7 +84,7 @@ class App {
             //});
 
 
-            rfxcom.clientConnect()
+            this.rfxcom.clientConnect()
 
 
 

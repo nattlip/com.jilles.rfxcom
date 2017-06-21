@@ -12,6 +12,8 @@ const libClass = require('./lib/libClass.js');
 
 const oregon = require('./oregondecoding.js')
 const visonic = require('./visonicdecoding.js')
+const X10 = require('./X10decoding.js')
+
 //const oregon = new oregonrequire()
 
 class rfxcom  {
@@ -22,7 +24,7 @@ class rfxcom  {
         this.lib = new libClass();
         this.lib.log = this.lib.log.bind(this);
         this.debug = true;//  to set debug on or off 
-
+        this.rfxcomconnected = false
 
 
 
@@ -76,19 +78,52 @@ class rfxcom  {
 
         console.log('Hello world');
 
+        // fires when one of the settings changed
         Homey.manager('settings').on('set', () => {
+             //check which setting changed
+
+            let oldip
+            let oldRecieverPort
+            let oldTransmitterport
+            let oldTesting
+            
+                      
+
+            
 
             // first check if there is a device with that ip and then check if it is a rfxcomlan. 
 
          //  this.serverTesting = Homey.manager('settings').get('testing') 77 sets it false value of setting in homey.settings must change to get0n.set activated
+          //  this.lib.log('cleint destryed in set ', this.client)
+            //this.client.destroy()
+
+          //  this.lib.log('cleint destryed in set 2 ',this.client)
+            this.lib.log('client in set setting', this.client)
+          
+            this.client.end();
+            this.client.destroy()
+            //this.client.destroy();
 
 
-            this.clientConnect(),
+
 
 
             this.serverIp = Homey.manager('settings').get('serverIp');
             this.serverReceiverPort = Homey.manager('settings').get('serverReceiverPort');
             this.serverTransmitterPort = Homey.manager('settings').get('serverTransmitterPort');
+
+
+
+
+
+
+
+
+
+           setTimeout(() => { this.clientConnect() }, 1000 )
+          //  this.clientConnect()
+
+            
 
 
             this.serverSet = false;
@@ -97,12 +132,17 @@ class rfxcom  {
             console.log('181 settings on set with serverReceiverPort ', this.serverReceiverPort);
             console.log('181 settings on set with this.serverTransmitterPort ', this.serverTransmitterPort);
 
-            Homey.manager('settings').set('testing', true );
+            Homey.manager('settings').set('testing', true);
+
+
 
         });
 
 
+        this.testServer = (input) => {
 
+            Homey.manager('api').realtime('testing', input);
+        }
 
 
 
@@ -117,46 +157,63 @@ class rfxcom  {
 
         //server.listen(1337, '127.0.0.1');
 
-        let client = new net.Socket();
-        client.setEncoding('HEX')
+        this.client = new net.Socket();
+        this.client.setEncoding('HEX')
 
 
         this.clientConnect = () => {
 
-            client.connect(Homey.settings.serverReceiverPort, Homey.settings.serverIp, () => {
+
+            if (typeof this.client == "undefined") {
+                util.log('client connect client undefined')
+                { Homey.manager('api').realtime('errormessage', 'new client client was undefined'); }
+                this.client = new net.Socket()
+                this.client.setEncoding('HEX')
+            }
+           // this.client.connect(Homey.settings.serverReceiverPort, Homey.settings.serverIp, () => {
+           
+            this.client.connect( this.serverReceiverPort,this.serverIp, () => {
+
+                this.lib.log('checkport', this.checkPort(this.serverReceiverPort))
+                this.lib.log('checkip', this.checkIp(this.serverIp))
+
+                if (this.checkPort(this.serverReceiverPort) && this.checkIp(this.serverIp)) {
 
 
-                console.log('Connected');
+                    console.log('Connected');
 
-                setTimeout(() => {
-                    let firstbyte = 0xF0
-                    let secondbyte = 0x2a//0x45 //no visonic
-                    //let secondbyte = 0x2A //0x2C //0X2A   2a receiveallpossible 2c rfxcom receiving
+                    setTimeout(() => {
+                        let firstbyte = 0xF0
+                        let secondbyte = 0x2a//0x45 //no visonic
+                        //let secondbyte = 0x2A //0x2C //0X2A   2a receiveallpossible 2c rfxcom receiving
 
-                    //let buffer = Buffer.from([0xF0, 0x40])  // visonic mode
-                    // let buffer = Buffer.from([ 0xF040])  // visonic mode
-                    let buffer = Buffer.from([firstbyte, secondbyte])   // all possible receiving modes
-        //  let buffer = Buffer.from([0x02, 0xA])   //
+                        //let buffer = Buffer.from([0xF0, 0x40])  // visonic mode
+                        // let buffer = Buffer.from([ 0xF040])  // visonic mode
+                        let buffer = Buffer.from([firstbyte, secondbyte])   // all possible receiving modes
+                        //  let buffer = Buffer.from([0x02, 0xA])   //
 
-                    client.write(buffer);
-                    this.lib.log(`${firstbyte.toString(16)}  ${secondbyte.toString(16)}   written`)
-                    this.lib.log(`${firstbyte}  ${secondbyte}   written`)
+                        this.client.write(buffer);
+                        this.lib.log(`${firstbyte.toString(16)}  ${secondbyte.toString(16)}   written`)
+                        this.lib.log(`${firstbyte}  ${secondbyte}   written`)
 
-                }, 1000)
-
-            });
-
-        }
-
-        client.on('error',  (err) => {
-            this.lib.log("Error: " + err.message);
-            this.serverSet = false
-            client.destroy()
-        })
+                    }, 1000)
 
 
+                }
+                else if (!this.checkPort(this.serverReceiverPort))
+                { Homey.manager('api').realtime('errormessage', 'portrange > 0 and port < 65536'); }
+                else if (this.checkIp(this.serverIp))
+                 { Homey.manager('api').realtime('errormessage', 'ip address not correct'); }
+            }) // client connect
 
-        client.on('data',  (dataStr) => {
+        } // this client connect    
+            
+                   
+
+
+
+
+        this.client.on('data',  (dataStr) => {
            
             this.lib.log('Received: ' + dataStr);
 
@@ -164,9 +221,13 @@ class rfxcom  {
 
         
             if (dataStr == `40` || dataStr == `2c`)
-            { util.log(`Server connected !! ip ${this.serverIp} response  ${dataStr} `) }
-
-
+            {
+                util.log(`Server connected !! ip ${this.serverIp} response  ${dataStr} `)
+                setTimeout(() => {
+                    Homey.manager('api').realtime('serverconnected','connected');
+                    Homey.manager('api').realtime('errormessage', 'no error');
+                },5000)
+            }
             else {
 
                 // extract firstbyte added by rfxcom 
@@ -240,14 +301,42 @@ class rfxcom  {
 
 
 
+        this.client.on('error', (err) => {
+            this.client.end()
+            this.lib.log("Error: " + err.message);
+            this.serverSet = false
+
+            this.client.end()
+            Homey.manager('api').realtime('errormessage', err.message);
+            Homey.manager('api').realtime('serverconnected', 'not connected');
+        })
+
+
+       
 
 
 
-
-        client.on('close', function () {
+        this.client.on('close', () => {
             console.log('Connection closed');
-            client.destroy()
+
+            this.lib.log('client close triggered')
+            this.client.end()
+               
+                util.log('client  on close     if (typeof client != "undefined")         ' , typeof this.client)
         });
+
+
+        this.checkIp = input => net.isIPv4(input)
+
+        this.checkPort = input => {
+            
+            if (input > 0 && input < 65536)
+               return  true
+            else return false
+
+           
+        }
+
 
 
 
@@ -280,12 +369,12 @@ class rfxcom  {
 
 
 
-            if (firstbyte == `50` || firstbyte == `60`)
+            if (firstbyte == `50` || firstbyte == `60` || firstbyte == '78')
             { oregon.parseRXData(hexStr) }
-            else if (firstbyte == 'a9')
+            else if (firstbyte == 'a9' )
             { visonic.decodeDataVisonic(hexStr) }
             else if (firstbyte == '20')
-            { }
+            { X10.parseRXData(hexStr) }
           //  { decodeDataX10h(hexStr) }
 
 
@@ -359,14 +448,22 @@ class rfxcom  {
         }
 
 
+
+
+
+
+
         let lookProtocolUp = identifier => knownVisonicSensorsMap[identifier]
 
         let lookDeviceUp = identifier => knownVisonicSensorsMap[identifier].name
 
+
+
+
         Homey.on('unload', () => {
             this.lib.log('unloading app')
 
-            client.destroy() // save some last settings, say goodbye to your remote connected devices, etc.
+            this.client.destroy() // save some last settings, say goodbye to your remote connected devices, etc.
         });
 
         let pad = (num, size) => {
