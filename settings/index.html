@@ -1,239 +1,459 @@
-﻿<!doctype html>
-<html>
+﻿<!DOCTYPE html>
+
+<html >
 <head>
 
-</head>
-<body>
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+        }
 
-    <h1>Rfxcom Lan Settings Page</h1>
-       <p>set host port </p>
+        /* Style the tab */
+        div.tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            clear: both    /*to clear float*/
+        }
 
-    <h2>Test Settings</h2>
-    <p>test your settings </p>
+            /* Style the buttons inside the tab */
+            div.tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 14px 16px;
+                transition: 0.3s;
+                font-size: 17px;
+            }
 
-    <fieldset>
-        <legend>Rfxcom  Lan variables</legend>
+                /* Change background color of buttons on hover */
+                div.tab button:hover {
+                    background-color: #ddd;
+                }
 
-        <div class='field row'>
-            <label for='ip'>ipaddress  server</label>
-            <input id='ip' type='text' value='' />     
-        </div>
+                /* Create an active/current tablink class */
+                div.tab button.active {
+                    background-color: #ccc;
+                }
 
-        <div class='field row'>
-            <label for='portReceiver'>port  receiver</label>
-            <input id='portReceiver' type='text' value='' />           
-        </div>
-
-        <div class='field row'>
-            <label for='portTransmitter'>port transmitter</label>
-            <input id='portTransmitter' type='text' value='' />        
-        </div>
-
-        
-
-        <div class='field row'>
-            <label for='test'>servertested</label>
-            <div id='test' style='display: inline-block'></div>
-        </div>
-
-        <div class='field row'>
-            <label for='connected'>serverconnected</label>
-            <div id='connected' style='display: inline-block'></div>
-        </div>
-
-        <div class='field row'>
-            <label for='errormessages'>errormessages</label>
-            <div id='errormessages' style='display: inline-block'></div>
-        </div>
-        <div class='field row'>
-            <label for='messages'>messages</label>
-            <div id='messages' style='display: inline-block'></div>
-        </div>
-        <div class='field row'>
-            <label for='something'>fromApi</label>
-            <div id='something' style='display: inline-block'></div>
-        </div>
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+    </style>
 
 
-        <!--<div class='field row'>
-            <label for='test2'>port rfxcom server</label>
-            <textarea id='test2'>textarea sample</textarea>
-        </div>-->
 
 
-    </fieldset>
-
-    <button class='right' onclick='save()'>Save changes</button>
-    <button class='right' onclick='getSomething()'>retrieve settings</button>
-    <button class='right' onclick='testserver()'>test rfxcom server</button>
-
+   
     <script type='text/javascript'>
 
-        var testingglobal;
-        var connectedglobal;
-
-        function onHomeyReady() {
-
-          
-          
-
-
-
-            Homey.get('serverIp', function (err, serverIp) {
-  //              if (err) return console.error('Could not get serverip', err);
-                document.getElementById('ip').value = serverIp;
-            });
-            Homey.get('serverReceiverPort', function (err, serverReceiverPort) {
-  //              if (err) return console.error('Could not get serverport', err);
-                document.getElementById('portReceiver').value = serverReceiverPort;
-            });
-
-            Homey.get('serverTransmitterPort', function (err, serverTransmitterPort) {
-     //           if (err) return console.error('Could not get password', err);
-                document.getElementById('portTransmitter').value = serverTransmitterPort;
-            });
-
-
-            
-
-
-
-
-
-            //Homey.get('testing', function (err, testing) {
-            //    //if (testing) { testing = false } else if (!testing) { testing = true };
-            //    testingglobal = testing;
-
-            //    if (err) return console.error('Could not get testing', err);
-            //    document.getElementById('test').innerHTML = testing;
-            //});
-
-
-            // gets event data from app.js firesd in callback request
-        //    Homey.on('my_event', function (data) {
-
-               
-
-
-            //    if (data.rfxcomserverconnected)
-            //        document.getElementById('connected').innerHTML = data.rfxcomserverconnected;
-            //    else if (data.testing)
-            //    document.getElementById('test').innerHTML = data.testing;
-            //});
-           
-            Homey.on('serverconnected', function (value) {
-                    if (value) {
-                        console.log('connected value ', value);
-                        document.getElementById('connected').innerHTML = value;
-                    }
-                });
-                Homey.on('errormessage', function (value) {
-                    if (value) {
-                        console.log('error value ', value);
-
-
-                        document.getElementById('errormessages').innerHTML = value;
-                    }
-                });
-
-                Homey.on('testing', function (value) {
-                    if (value) {
-                        console.log('error value ', value);
-                        document.getElementById('test').innerHTML = value;
-                    }
-                });
-         
-
-
-
-
-
-
-            Homey.ready()
-
+        let execute = function (fct, i) {
+            fct(i);
         }
 
+        let execute2 = function (fct, i, j) {
+            fct(i, j);
+        }
 
-     
+        let Datas
+        let Devices
 
-        function save() {
+            function onHomeyReady() {
 
-     
+                Homey.ready()
+
+                Homey.get('RxTxDatas', function (err, RxTxDatas) {
+                    if (err) console.log(err);
+                    Datas = RxTxDatas                                       
+                });
+               
+                Homey.get('RxTxDevices', function (err, RxTxDevices) {
+                    if (err) console.log(err);
+                    Devices = RxTxDevices
+
+                    for (let RxTx of Devices)
+                    {      
+                        
+                        addtab(RxTx.type, RxTx.tabIndex)
+
+
+                        document.getElementById('Ip' + RxTx.type + RxTx.tabIndex).value = RxTx.ip
+
+                     
+                        if (RxTx.type == 'RxLan') {
+
+                           document.getElementById('Rx' + RxTx.type + RxTx.tabIndex).value = RxTx.rx
+                        }
+                        if (RxTx.type == 'RxTxLan') {
+
+                           document.getElementById('Rx' + RxTx.type + RxTx.tabIndex).value = RxTx.rx
+                           document.getElementById('Tx' + RxTx.type + RxTx.tabIndex).value = RxTx.tx
+
+                        }
+                        if (RxTx.type == 'TxLan') {
+
+                            document.getElementById('Rx' + RxTx.type + RxTx.tabIndex).value = RxTx.tx
+                        }
+                        if (RxTx.type == 'RfxTrx') {
+
+                            document.getElementById('Rx' + RxTx.type + RxTx.tabIndex).value = RxTx.rx
+
+                        }
 
 
 
-            Homey.set('serverIp', document.getElementById('ip').value);
-            Homey.set('serverReceiverPort', document.getElementById('portReceiver').value);
-            Homey.set('serverTransmitterPort', document.getElementById('portTransmitter').value);
+
+                    }
+
+
+                   
+
+
+                });        
+
+            }
+
+            function openCity(evt, cityName) {
+                let i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(cityName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+
+
+           
+
+
+
+
+
+
+
         
 
 
 
-        };
-
-        function retrieve()
-        {
-            Homey.get('serverIp', function (err,serverIp) {
-                if (err) return console.error('Could not get serverip', err);
-                document.getElementById('ip').value = serverIp;
-            });
-
-            Homey.get('serverReceiverPort', function (err, serverReceiverPort) {
-                 if (err) return console.error('Could not get serverport', err);
-                document.getElementById('portReceiver').value = serverReceiverPort;
-            });
-
-            Homey.get('serverTransmitterPort', function (err, serverTransmitterPort) {
-                if (err) return console.error('Could not get password', err);
-                document.getElementById('portTransmitter').value = serverTransmitterPort;
-            });
 
 
 
 
 
+            function addTabContent(input) {
 
-        }
+                let content = document.createElement('div')
+
+                let head = createTabContentHead(input)
+                content.appendChild(head)
+
+                let type = input.replace(/[0-9]/g, '');
+                let index = input.replace(/[^0-9]/g, '');
 
 
-        function testserver() {
 
-            testingglobal = true
-            Homey.api('PUT', '/testserver/', { 'test' : 'jillestest'}, function (err, ok) {
-                if (ok) {
-                    document.getElementById('messages').innerHTML = ok;
+                let iprow = createFieldRow('input', input, 'Ip', 'Ip address')
+                content.appendChild(iprow)
+
+                if (type !== "TxLan") {
+                    let rxrow = createFieldRow('input', input, 'Rx', 'Rx    port')
+                    content.appendChild(rxrow)
                 }
-            });
+
+
+                if (type == "RxTxLan" || type == "TxLan") {
+                    // id = rxlan01 , type is Rx, Tx or Ip          
+                    let txrow = createFieldRow('input', input, 'Tx', 'Tx    port')
+                    content.appendChild(txrow)
+                }
+
+
+
+                let connectedrow = createFieldRow('div', input, 'Con', 'Connected')
+                content.appendChild(connectedrow)
+
+                 connectedrow = createFieldRow('div', input, 'Mes', 'Messages')
+                content.appendChild(connectedrow)
+
+                return content
+            }
+
+
+
+            function createTabContentHead(id) {
+
+                let h1 = document.createElement('h1')
+                h1.innerHTML = `Rfxcom ${id} Settings Page`
+
+                let p = document.createElement('p')
+                p.innerHTML = 'set Host Ip and Port'
+
+                let div = document.createElement('div')
+
+                div.appendChild(h1)
+                div.appendChild(p)
+
+                return div
+
+            }
+
+
+            // tag  'div' or 'input'    id = rxlan01 , type is Rx, Tx or Ip
+            function createFieldRow(tag, id, type, txt) {
+
+                let label = document.createElement('label')
+                label.htmlFor = type + id
+                label.innerHTML = txt
+
+                let input = document.createElement(tag)
+                input.id = type + id
+                input.value = ''
+
+
+
+                let div = document.createElement('div')
+                div.className = 'field row'
+
+                div.appendChild(label)
+                div.appendChild(input)
+
+
+                return div
+
+            }
+
+
+
+            function deletetab(input) {
+                console.log('deletetab pressed')
+
+                let tablinksactive = document.getElementsByClassName("tablinks active");
+
+                let tab = tablinksactive[0]
+
+                tab.parentNode.removeChild(tab);
+
+                let div = document.getElementById(input)
+
+                div.parentNode.removeChild(div)
+
+                console.log('deleted with input ', input)
+
+
+                let type = input.replace(/[0-9]/g, '');
+                let index = input.replace(/[^0-9]/g, '');
+
+                let transceiver =
+                    {
+                        "type": type,
+                        "index": index
+
+                    }
+
+                console.log('delete transceiver  ', transceiver)
+                Homey.api('PUT', '/deleteTransceiver/', transceiver, function (err, ok) {
+                    if (ok) {
+                        document.getElementById('mes' + dev + ind).innerHTML = 'saved ok';
+                    }
+                });
+
+
+
+
+            }
+
+            function save(dev, ind) {
+
+                let ip
+                let rx
+                let tx
+
+                console.log('save with dev and index', dev, '  ', ind)
+
+                ip = document.getElementById('Ip' + dev + ind).value
+                if (dev == 'RxLan') {
+                  
+                    rx = document.getElementById('Rx' + dev + ind).value
+                }
+                if (dev == 'RxTxLan') {
+                
+                    rx = document.getElementById('Rx' + dev + ind).value
+                    tx = document.getElementById('Tx' + dev + ind).value
+                }
+                if (dev == 'TxLan') {
+               
+                    tx = document.getElementById('Rx' + dev + ind).value
+                }
+                if (dev == 'RfxTrx') {
+               
+                    rx = document.getElementById('Rx' + dev + ind).value
+
+                }
+
+
+
+
+
+                
+                let transceiver = {
+                    "index": ind.toString(),
+                    "type": dev,
+                    "ip": ip,
+                    "rx": rx,
+                    "tx": tx
+                    }
+
+
+
+
+              
+               // function ValidateIPaddress(inputText) {
+               //     var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+               //     if (inputText.value.match(ipformat)) {
+               //         return true;
+               //     }
+               //     else {
+               //         alert("You have entered an invalid IP address!");
+               //         return false
+               //      }  
+               //      }  
+
+               //let checkPort = input => {
+
+               //     if (input > 0 && input < 65536)
+               //         return true
+               //     else return false
+
+
+               // }
+
+
             
-           
-        };
+
+
+
+                
+            //   if (checkPort(ip) && checkIp(rx)                    ) {
+
+
+                   // property keys must be strings
+                   Homey.api('PUT', '/saveTransceiver/', transceiver, function (err, ok) {
+                       if (ok) {
+                           document.getElementById('mes' + dev + ind).innerHTML = 'saved ok';
+                       }
+                   });
+
+        //       }
+
+            }
+
+
+
+
+        // index isnt given with new tab , only with tab from stored device in app
+            function addtab(device, index) {
+
+
+                tabcontent = document.getElementsByClassName("tabcontent");
+
+                if (index === undefined) {
+                    index = tabcontent.length
+                    index = index + 1
+                } 
+
+                
+             
+
+
+
+
+                let button = document.createElement("input")
+                button.className = "right";
+                button.value = "delete";
+                button.type = "button";
+                // button.onclick = function () { buttonfunction + "()"; };
+                button.addEventListener("click", function () { execute(deletetab, device + index) });
+
+                let button1 = document.createElement("input")
+                button1.className = "right";
+                button1.value = "save";
+                button1.type = "button";
+                // button.onclick = function () { buttonfunction + "()"; };
+                button1.addEventListener("click", function () { execute2(save, device, index) });
+
+
+
+                let div = document.createElement("div")
+                div.id = device + (index)
+                div.className = "tabcontent"
+                let divinner = document.createElement("div")
+                divinner.id = device + 'Text'
+                let content = addTabContent(device + index)
+
+
+
+
+                divinner.appendChild(content)
+                divinner.appendChild(button)
+                divinner.appendChild(button1)
+                // divinner.innerHTML = `<button class="right" onclick="deletetab('${device + index}')" />delete</button>`
+
+                div.appendChild(divinner)
+
+
+
+
+
+
+                document.body.appendChild(div)
+
+                div = document.getElementById(device + index)
+                div.style.display = "block"
+
+                let old = document.getElementById("tabs").innerHTML
+
+                document.getElementById("tabs").innerHTML = old + `<button class="tablinks active" onclick="openCity(event, '${device + index}')" >${device + index}</button>`
+
+
+
+
+            };
+
+
+          
 
        
+        </script>
+</head >
+             <body>
+                 <h1>Rfxcom Transceivers Settings Page</h1>
+                 <div>
+                      <div style="float: left;"><button onclick='addtab("RxLan")'>add RxLan</button></div>
+                      <div style="float: left;"><button onclick='addtab("RxTxLan")'>Add RxTxLan</button></div>
+                      <div style="float: left;"><button onclick='addtab("TxLan")'>Add TxLan</button></div>
+                      <div style="float: left;"><button onclick='addtab("RfxTrx")'>Add RfxTrx</button></div>
+                 </div>
+                 
+                 <div id="tabs" class="tab" ></div>
 
-        function getSomething() {
-
-            // Get Gateway configuration
-            Homey.api('GET', '/getSomething/', {}, function (err, something) {
-                if (something) {
-                    document.getElementById('something').innerHTML = something;
-                    console.log(`gotsomething`)
-                }
-            });
-
-        }
-
-
-        function initpagesettings(settingstring, setting) {
-            Homey.get(settingstring, function (err, setting) {
-                if (err) { return 'no data set' }
-
-                else { return setting }
-
-            });
-        };
+          
 
 
-    </script>
 
-</body>
-</html>
+
+
+             </body>
+
+
+</html >

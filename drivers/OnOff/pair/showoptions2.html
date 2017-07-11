@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+
+
+
+<script type="text/javascript">
+
+   
+
+    //http://www.electrictoolbox.com/javascript-add-options-html-select/
+    if (document && document.createElement)
+    {
+
+
+        function makehtml()
+        {
+
+            var z;
+
+            var x = document.getElementById("text").parentElement.nodeName;
+
+
+
+            var y = document.getElementsByClassName("view-content");
+
+            // alert(y.length);
+            alert("onoff is this");
+
+            z = y[0];
+
+            var alphabet = "abcdefghijklmnop".split("");
+            var alphabetCount = 16
+            console.log("hello");
+
+            var houseCodes = document.createElement("select");
+            houseCodes.className = "button";
+            //<option value="" disabled selected style="display:none;">Label</option>
+            var zeroOption = new Option("HouseCode", "0");
+            houseCodes.options[houseCodes.options.length] = zeroOption;
+            for (var i = 1; i <= alphabetCount ; i++)
+            {
+                houseCodes.options[houseCodes.options.length] = new Option(alphabet[i - 1].toUpperCase(), alphabet[i - 1].toUpperCase());
+            }
+            houseCodes.selectedIndex = 0;
+            houseCodes.onchange = function () { saveHouseCode(); };
+            z.appendChild(houseCodes);
+
+
+            var numbers = new Array(16); //create a 16 element array
+
+            var unitCodes = document.createElement("select");
+            unitCodes.className = "button";
+            var zeroOption2 = new Option("UnitCode", "0");
+            unitCodes.options[unitCodes.options.length] = zeroOption2;
+            for (var i = 1; i <= numbers.length; i++)
+            {
+                unitCodes.options[unitCodes.options.length] = new Option(i.toString(), i.toString());
+            }
+            unitCodes.selectedIndex = 0;
+            unitCodes.onchange = function () { saveUnitCode() };
+            z.appendChild(unitCodes);
+
+            function saveHouseCode()
+            {
+
+                Homey.emit('saveHouseCode', { "houseCode": houseCodes[houseCodes.selectedIndex].value });
+            }
+
+            function saveUnitCode()
+            {
+                Homey.emit('saveUnitCode', { "unitCode": unitCodes[unitCodes.selectedIndex].value });
+
+            }
+
+            Homey.on('same', function ()
+            {
+                //alert('same address detected')
+                var sameX10Address = document.createElement('div');
+                sameX10Address.id = 'sameX10Address';
+                sameX10Address.innerHTML = 'Already used houseCode and unitCode detected';
+                z.appendChild(sameX10Address);
+            })
+
+            var nextButton = document.createElement('div');
+            nextButton.id = 'next';
+            nextButton.className = 'button';
+            nextButton.innerHTML = 'NEXT >';
+
+
+            nextButton.style.position = 'absolute';
+            nextButton.style.bottom = 0;
+            nextButton.style.right = 0;
+            nextButton.onclick = next;
+            z.appendChild(nextButton);
+
+            function next()
+            {
+                alert('nextbutton pressed')
+
+
+                var virtualDeviceClass = $('.deviceclasses-list input[name="deviceClass-dummy"]:checked');
+
+                Homey.emit('done', function (err, device)
+                {
+                    if (virtualDeviceClass.length > 0)
+                    {
+                        device.virtualClass = $(virtualDeviceClass).val();
+                        device.virtualCapabilities = $(virtualDeviceClass).data('capabilities').split(',');
+                    }
+
+                    Homey.addDevice(device, function ()
+                    {
+                        Homey.done();
+                    });
+                });
+
+
+                document.body.innerHTML = '<i class="loading fa fa-cog fa-spin"></i>'
+
+
+            }
+
+
+        }
+
+        function callbackhtml(fn)
+        {
+            fn();
+        }
+
+        Homey.on('pairHtml', data =>
+        {
+            callbackhtml(data)
+
+
+
+        })
+
+       // callbackhtml(makehtml);
+
+
+
+
+
+    };  // if
+
+   
+   
+
+
+
+   
+
+   
+
+   
+
+   
+
+
+</script>
+
+<div id='instruction'class="button">Choose the housecode and unitcode of X10 device </div>
+<div id='text'></div>
+

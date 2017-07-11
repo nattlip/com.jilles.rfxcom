@@ -3,5 +3,13 @@
 # Blacklist files/folders in same directory as the .gitignore file
 #/*
 #!drivers/OnOff/pair/showoptions.html
-TextFile2.txt
-env.json
+
+
+## everything
+#/*
+## not dir settings
+#!/settings
+##not not  files dir settings 
+#/settings/*
+## except
+#!settings/index.html

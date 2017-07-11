@@ -44,6 +44,17 @@ first submission release to alpha channel
 adjusted settingspage , first setup communication with api.js , check on ip and port input 
 added working oregon drivers for temp temphum temphumbar uv amd rain 
 
+11-07-2017
+
+a lot of work is done to make the settingspage and app ready for multiple receivers transmitters and RfxTrx Rfxcom Devices. That is working now.
+As device the X10 MSE13 is added. RfxTrx devices must be connected to a serialtonet solution so the app can connect to it over the net node interface. 
+here is the link for the node serial2net javascript file i use on a raspberry pi 3 to connect to a RfxTrx433e with Homey https://github.com/nattlip/pi.node.serial2net
+
+The Rxtrx input can be read in the log it is not availble for drivers yet. It is a little modification of the node rftrx rfxcom node software available on github
+https://github.com/rfxcom/node-rfxcom 
+
+No commands can be send yet 
+
 
 [![Paypal donate][pp-donate-image]][pp-donate-link]
 [pp-donate-link]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=42UGL52J4KPZE

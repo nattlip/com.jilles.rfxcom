@@ -1,6 +1,6 @@
 {
   "id": "com.jilles.rfxcom",
-  "version": "0.0.512",
+  "version": "0.0.602",
   "compatibility": ">=1.0.1",
   "category": [
     "climate",
@@ -288,7 +288,74 @@
           "template": "add_devices"
         }
       ]
+    },
+
+    {
+      "id": "MS13E",
+      "name": {
+        "en": "MS13E",
+        "nl": "MS13E"
+      },
+      "class": "sensor",
+      "capabilities": [ "alarm_motion", "alarm_night" ],
+      "images": {
+        "large": "drivers/MS13E/assets/images/large.jpg",
+        "small": "drivers/MS13E/assets/images/small.jpg"
+      },
+
+      "pair": [
+
+        {
+          "id": "showoptions"
+
+        }
+      ]
+    },
+
+    {
+      "id": "OnOff",
+      "name": {
+        "en": "OnOff"
+      },
+      "class": "socket",
+      "capabilities": [
+        "onoff"
+      ],
+      "images": {
+        "large": "drivers/OnOff/assets/images/large.jpg",
+        "small": "drivers/OnOff/assets/images/small.jpg"
+      },
+      "pair": [
+
+        {
+          "id": "showoptions"
+
+        }
+      ]
+    },
+
+    {
+      "id": "Dim",
+      "name": {
+        "en": "Dim",
+        "nl": "Dim"
+      },
+      "class": "socket",
+      "capabilities": [ "onoff", "dim" ],
+      "images": {
+        "large": "drivers/Dim/assets/images/large.jpg",
+        "small": "drivers/Dim/assets/images/small.jpg"
+      },
+
+      "pair": [
+
+        {
+          "id": "showoptions"
+
+        }
+      ]
     }
+
   ]
 
 

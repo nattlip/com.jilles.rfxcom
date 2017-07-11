@@ -1,28 +1,37 @@
 ﻿"use strict";
 const util = require('util');
-const driverLib = require('../driverGenerator/driverLib.js');  // no new and () in module export drivergenerator 
+const driverLib = require('../driverGenerator/driverLib.js');  // no new and () in module export driverlib
 const libClass = require('../../lib/libClass.js');
 const helpFunctions = require('../lib/helpFunctions.js').jan;
 
 
+//util.log(` Dim  is this.  ................before class `, util.inspect(driverLib));
 
 
 
-class Oregon extends driverLib {
+
+
+
+
+
+
+
+class Dim extends driverLib {
     constructor() {
 
         let params = {};
         let appV = `Rfxcom`
-        let driverV = `Oregon`
+        let typeV = 'X10'
+        let driverV = `Dim`
         let capabilitiesV = ['onoff', 'dim']
-        let typeV = 'oregon'
+
 
 
         params['app'] = appV;
         params['driver'] = driverV
         params['capabilities'] = capabilitiesV
         params['type'] = typeV
- 
+
 
         //#region constructor
 
@@ -49,7 +58,20 @@ class Oregon extends driverLib {
 
         this.lib.log('params dim ', params)
 
-       
+        // this.init = this.init.bind(this);
+        //this.pair = this.pair.bind(this);
+
+        //this.addDevice = this.addDevice.bind(this);
+        //this.updateCapabilitiesHomeyDevice = this.updateCapabilitiesHomeyDevice.bind(this);
+
+        //this.capabilities.onoff.get = this.capabilities.onoff.get.bind(OnOff);
+        //this.capabilities.onoff.set = this.capabilities.onoff.set.bind(OnOff);
+
+        //this.getDeviceById = this.getDeviceById.bind(this);
+
+
+
+        //this.updateDeviceOnOff = this.updateDeviceOnOff.bind(this);
 
 
 
@@ -69,7 +91,4 @@ class Oregon extends driverLib {
 
 
 }
-module.exports = new Oregon();
-
-
-
+module.exports = new Dim();

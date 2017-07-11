@@ -1,6 +1,5 @@
 ﻿"use strict";
 const util = require('util');
-//const driverLib = require('../driverGenerator/driverLib.js');// no new and () in module export drivergenerator
 //const params = {
 //    app: `Rfxcom`,
 //    driver: `security`,
@@ -13,7 +12,6 @@ const util = require('util');
 //}
 const driverLib = require('../driverGenerator/driverLib.js');
 const libClass = require('../../lib/libClass.js');
-//const signal = require('../../signalx10.js');
 const helpFunctions = require('../lib/helpFunctions.js').jan;
 
 
@@ -26,6 +24,7 @@ class security extends driverLib {
         let params = {};
         let appV = `Rfxcom`
         let driverV = `security`
+        let typeV = 'visonic'
         let capabilitiesV = [
             "alarm_contact",
             "alarm_battery",
@@ -39,7 +38,7 @@ class security extends driverLib {
         params['app'] = appV;
         params['driver'] = driverV
         params['capabilities'] = capabilitiesV
-
+        params['type'] = typeV
 
 
         //#region constructor

@@ -7,7 +7,7 @@ const convert = require('../lib/baseConverter').jan.ConvertBase;
 const helpFunctions = require('../lib/helpFunctions.js').jan;
 
 const libClass = require('../lib/libClass.js')
-const signal = require('../oregondecoding.js');
+const signal = require('../lib/rfxcom/lan/oregondecoding.js');
 
 //const driverProperties = require('./driverLibProp.js');
 //const driverFunctions = require('./driverLibFunct.js');
@@ -23,6 +23,7 @@ class driverProperties {
 
         let app = params['app']
         let driver = params['driver']
+        let type = params['type']
         let capabilities = params['capabilities']
 
        // this.appReference = require('../app.js')
@@ -38,8 +39,12 @@ class driverProperties {
         this.lib.log('app ', app)
         this.lib.log('driver', driver)
         this.lib.log('capabilities', capabilities)
+        this.lib.log('type', type)
 
-        signal.on('signal', frame => this.lib.log('frame', frame))
+        // from oregon
+        if (type == 'oregon') {
+            signal.on('signal', frame => this.lib.log('frame', frame))
+        }
         
 
         //variables needed in drvers self 
@@ -47,7 +52,7 @@ class driverProperties {
         // to put the complete devices 
         this.homeyDevices = new Array();
 
-        if (app = 'X10') {
+        if (type == 'X10') {
             this.houseCode = "";
             this.unitCode = "";
         }
@@ -256,14 +261,17 @@ makehtml();
 class driverFunctions extends driverProperties {
     constructor(params) {
 
+        super(params);
+
+
         let app = params['app']
         let driver = params['driver']
         let capabilities = params['capabilities']
+        let type = params['type']
 
 
 
-
-        super(params);
+        
         this.lib = new libClass();
         // this.lib.log = this.lib.log.bind(this);// makes that this class is this in function and not base class
         libClass.getDeviceById = libClass.getDeviceById.bind(this)
@@ -313,6 +321,7 @@ class driverFunctions extends driverProperties {
             this.lib.log('init after addDevice homeyDevices ', util.inspect(Homey.app.homeyDevices, false, null))
 
             this.lib.log('app  in pair   ', app)
+            this.lib.log('type', type)
             this.lib.log('driver in pair    ', driver)
             this.lib.log('if else security ', app == 'Rfxcom' & driver == `Security`)
 
@@ -328,7 +337,7 @@ class driverFunctions extends driverProperties {
             this.lib.log('driver in pair    ', driver)
             this.lib.log('if else security ', app == 'Rfxcom' & driver == `Security`  )
 
-            if (app == 'X10') {
+            if (type == 'X10') {
 
                 let houseCode = ''
                 let unitCode = ''
@@ -384,7 +393,7 @@ class driverFunctions extends driverProperties {
                     deviceParams.houseCode = houseCode
                     deviceParams.unitCode = unitCode
 
-                    let homeyDevice = libClass.computeHomeyDevice(deviceParams, app, driver, capabilities)
+                    let homeyDevice = libClass.computeHomeyDevice(deviceParams, app, driver, capabilities,type)
 
 
 
@@ -670,8 +679,7 @@ class driverFunctions extends driverProperties {
 
 
 
-                            //TODO: if dimdevice capability off or on  is set dim value to 0 or 1
-                            //TODO:update device capability accordingly in device
+                      
 
 
 
@@ -921,7 +929,7 @@ class driverFunctions extends driverProperties {
 
             }  // if slarm night
 
-
+            //TODO   signaLtype devicetype  RxTxtype now all types
 
 
 
@@ -957,13 +965,13 @@ class driverFunctions extends driverProperties {
         //device_data in  moved to libclass static pair is boolean if pair thousecode and untkcode isknown
         this.addDevice = (deviceData, app, driver, capabilities) => {
             let deviceParams = {}
-            if (app == 'X10') {
+            if (type == 'X10') {
                 
 
                 deviceParams.houseCode = deviceData.houseCode
                 deviceParams.unitCode = deviceData.unitCode
                 //  this.homeyDevices.push(libClass.computeHomeyDevice(deviceParams,app, driver, capabilities))
-                Homey.app.homeyDevices.push(libClass.computeHomeyDevice(deviceParams, app, driver, capabilities))
+                Homey.app.homeyDevices.push(libClass.computeHomeyDevice(deviceParams, app, driver, capabilities,type))
                 this.devicesData.push(deviceData)
                 //this.lib.log('driver MS14E homeydevices in adddevice', util.inspect(Homey.app.homeyDevices, false, null));
             }
@@ -1029,7 +1037,7 @@ class driverLib extends driverFunctions {
         let app = params['app']
         let driver = params['driver']
         let capabilities = params['capabilities']
-
+        let type = params['type']
 
         
 
@@ -1046,7 +1054,7 @@ class driverLib extends driverFunctions {
         this.lib.log('app ', app)
         this.lib.log('driver', driver)
         this.lib.log('capabilities', capabilities)
-
+        this.lib.log('type ', type)
 
         this.drivers = {
 
