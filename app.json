@@ -1,6 +1,6 @@
 {
   "id": "com.jilles.rfxcom",
-  "version": "0.0.602",
+  "version": "0.0.619",
   "compatibility": ">=1.0.1",
   "category": [
     "climate",
@@ -9,8 +9,8 @@
     "appliances"
   ],
   "name": {
-    "en": "rfxcom",
-    "nl": "rfxcom"
+    "en": "Rfxcom",
+    "nl": "Rfxcom"
   },
   "description": {
     "en": "App to receive and send Rfxcom Lan reports",
@@ -239,8 +239,8 @@
         "nl": "Security Sensor"
       },
       "images": {
-        "large": "drivers/security/assets/large.jpg",
-        "small": "drivers/security/assets/small.jpg"
+        "large": "drivers/security/assets/images/large.jpg",
+        "small": "drivers/security/assets/images/small.jpg"
       },
       "class": "sensor",
       "capabilities": [

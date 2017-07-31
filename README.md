@@ -52,8 +52,13 @@ here is the link for the node serial2net javascript file i use on a raspberry pi
 
 The Rxtrx input can be read in the log it is not availble for drivers yet. It is a little modification of the node rftrx rfxcom node software available on github
 https://github.com/rfxcom/node-rfxcom 
-
 No commands can be send yet 
+
+31-07-2017
+
+TEMPHUMBAR TEMBAR TEMP (orgon) works now correct with lan and rfxtrx. oregon driver still available 
+lan and rfxtrx reconnects now after network error 
+No commands can be send yet
 
 
 [![Paypal donate][pp-donate-image]][pp-donate-link]
